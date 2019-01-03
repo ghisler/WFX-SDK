@@ -1,0 +1,47 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsFindFirst</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsFindFirst</B></div>
+<div class="p2">FsFindFirst is called to retrieve the first file in a directory of the plugin's file system.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">HANDLE __stdcall FsFindFirst(char* Path, WIN32_FIND_DATA *FindData);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">Path  </span>Full path to the directory for which the directory listing has to be retrieved. <B>Important: </B>no wildcards are passed to the plugin! All separators will be backslashes, so you will need to convert them to forward slashes if your file system uses them!</div>
+<div class="p9"><span class="s3">  </span>As root, a single backslash is passed to the plugin. The root items appear in the plugin base directory retrieved by <A HREF="fsgetdefrootname.htm">FsGetDefRootName</A> at installation time. This default root name is NOT part of the path passed to the plugin!</div>
+<div class="p9"><span class="s3">  </span>All subdirs are built from the directory names the plugin returns through FsFindFirst and FsFindNext, separated by single backslashes, e.g.</div>
+<div class="p9">\Some server\c:\subdir</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FindData  </span>A standard <A HREF="win32_find_data.htm">WIN32_FIND_DATA</A> struct as defined in the Windows SDK, which contains the file or directory details. Use the dwFileAttributes field set to FILE_ATTRIBUTE_DIRECTORY to distinguish files from directories. On Unix systems, you can | (or) the dwFileAttributes field with 0x80000000 and set the <span class="s8">dwReserved0</span> parameter to the Unix file mode (permissions).</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">Return INVALID_HANDLE_VALUE (==-1, not zero!) if an error occurs, or a number of your choice if not. It is recommended to pass a pointer to an internal structure as this handle, which stores the current state of the search. This will allow recursive directory searches needed for copying whole trees. This handle will be passed to FsFindNext() by the calling program.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">When an error occurs, call <B>SetLastError()</B> to set the reason of the error. Total Commander checks for the following two errors:</div>
+<div class="p2">1. ERROR_NO_MORE_FILES: The directory exists, but it's empty (Totalcmd can open it, e.g. to copy files to it)</div>
+<div class="p2">2. Any other error: The directory does not exist, and Total Commander will not try to open it.</div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><B>Important notes:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">1. FsFindFirst may be called directly with a subdirectory of the plugin! You cannot rely on it being called with the root \ after it is loaded. <B>Reason:</B> Users may have saved a subdirectory to the plugin in the Ctrl+D directory hotlist in a previous session with the plugin.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">2. "Path" can be up to 259 (MAX_PATH-1) characters long when FsFindFirstW isn't implemented, and up to 1023 characters when FsFindFirstW is implemented (also in the ANSI version of the function)! This doesn't include the final 0 character.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>See also:</B> <A HREF="fsfindnext.htm">FsFindNext</A>, <A HREF="fsfindclose.htm">FsFindClose</A></div>
+<div class="p2">
+</div>
+</BODY></HTML>

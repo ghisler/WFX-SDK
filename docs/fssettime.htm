@@ -1,0 +1,36 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsSetTime</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsSetTime</B></div>
+<div class="p2">FsSetTime is called to set the (Windows-Style) file times of a file/dir.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">BOOL __stdcall FsSetTime(char* RemoteName, FILETIME *CreationTime, FILETIME *LastAccessTime, FILETIME *LastWriteTime);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">RemoteName  </span>Name of the file/directory whose attributes have to be set</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">CreationTime  </span>Creation time of the file. May be NULL to leave it unchanged.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">LastAccessTime  </span>Last access time of the file. May be NULL to leave it unchanged.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">LastWriteTime  </span>Last write time of the file. May be NULL to leave it unchanged. If your file system only supports one time, use this parameter!</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Return value:</B></div>
+<div class="p2">Return TRUE if successful, FALSE if the function failed. Do NOT export this function if it isn't supported by your plugin!</div>
+<div class="p2">
+</div>
+</BODY></HTML>

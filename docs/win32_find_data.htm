@@ -1,0 +1,61 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>WIN32_FIND_DATA</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>WIN32_FIND_DATA</B></div>
+<div class="p2">WIN32_FIND_DATA is used by FsFindFirst and FsFindNext. It is defined in the Windows SDK.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">typedef struct _WIN32_FIND_DATA {</div>
+<div class="p8">&nbsp; DWORD&nbsp;&nbsp;&nbsp; dwFileAttributes;</div>
+<div class="p8">&nbsp; FILETIME ftCreationTime;</div>
+<div class="p8">&nbsp; FILETIME ftLastAccessTime;</div>
+<div class="p8">&nbsp; FILETIME ftLastWriteTime;</div>
+<div class="p8">&nbsp; DWORD&nbsp;&nbsp;&nbsp; nFileSizeHigh;</div>
+<div class="p8">&nbsp; DWORD&nbsp;&nbsp;&nbsp; nFileSizeLow;</div>
+<div class="p8">&nbsp; DWORD&nbsp;&nbsp;&nbsp; dwReserved0;</div>
+<div class="p8">&nbsp; DWORD&nbsp;&nbsp;&nbsp; dwReserved1;</div>
+<div class="p8">&nbsp; TCHAR&nbsp;&nbsp;&nbsp; cFileName[ MAX_PATH ];</div>
+<div class="p8">&nbsp; TCHAR&nbsp;&nbsp;&nbsp; cAlternateFileName[ 14 ];</div>
+<div class="p8">} WIN32_FIND_DATA, *PWIN32_FIND_DATA;</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Total Commander currently uses the following struct members:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">dwFileAttributes  </span>File attributes. Use at least the FILE_ATTRIBUTE_DIRECTORY flag to distinguish between files and directories. Links should be returned as files.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ftCreationTime  </span>Currently unused. If available, set to the time when the file was created.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ftLastAccessTime  </span>Currently unused. If available, set to the time when the file was last accessed.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ftLastWriteTime  </span>Time stamp shown in the Total Commander file list, and copied with files. Use the following settings for files which don't have a time:</div>
+<div class="p9"><span class="s3">  </span>ftLastWriteTime.dwHighDateTime=0xFFFFFFFF;</div>
+<div class="p9"><span class="s3">  </span>ftLastWriteTime.dwLowDateTime=0xFFFFFFFE;</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">nFileSizeHigh  </span>High DWORD of file size</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">nFileSizeLow  </span>Low DWORD of file size</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">dwReserved0  </span>On Unix systems, you can | (or) the dwFileAttributes field with 0x80000000 and set the <span class="s8">dwReserved0</span> parameter to the Unix file mode (permissions). These will then be shown in Totalcmd can can be changed through Files - Change attributes.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">dwReserved1  </span>Unused, must be set to 0. Reserved for future plugin enhancements.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">cFileName  </span>Local file name relative to the directory (without the path)</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">cAlternateFileName  </span>DOS-style file name (optional), set first char to 0 if unused.</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">You should fill the whole struct with zeroes before filling in the fields, e.g. with memset(FindData,0,sizeof(WIN32_FIND_DATA));</div>
+<div class="p2">
+</div>
+</BODY></HTML>

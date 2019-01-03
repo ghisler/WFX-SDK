@@ -1,0 +1,52 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsRenMovFile</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsRenMovFile</B></div>
+<div class="p2">FsRenMovFile is called to transfer (copy or move) a file within the plugin's file system.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsRenMovFile(char* OldName, char* NewName, BOOL Move, BOOL OverWrite, RemoteInfoStruct* ri);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">OldName  </span>Name of the remote source file, with full path. The name always starts with a backslash, then the names returned by FsFindFirst/FsFindNext separated by backslashes.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">NewName  </span>Name of the remote destination file, with full path. The name always starts with a backslash, then the names returned by FsFindFirst/FsFindNext separated by backslashes.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">Move  </span>If true, the file needs to be moved to the new location and name. Many file systems allow to rename/move a file without actually moving any of its data, only the pointer to it.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">OverWrite  </span>Tells the function whether it should overwrite the target file or not. See notes below on how this parameter is used.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ri  </span>A structure of type <A HREF="remoteinfostruct.htm">RemoteInfoStruct</A> which contains the parameters of the file being renamed/moved (not of the target file!). In TC 5.51, the fields are set as follows for directories: SizeLow=0, SizeHigh=0xFFFFFFFF.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">Return one of the following values:</div>
+<div class="p17"><span class="s15">FS_FILE_OK  </span>The file was copied/moved OK</div>
+<div class="p17"><span class="s15">FS_FILE_EXISTS  </span>The target file already exists</div>
+<div class="p17"><span class="s15">FS_FILE_NOTFOUND  </span>The source file couldn't be found or opened.</div>
+<div class="p17"><span class="s15">FS_FILE_READERROR  </span>There was an error reading from the source file</div>
+<div class="p17"><span class="s15">FS_FILE_WRITEERROR  </span>There was an error writing to the target file, e.g. disk full</div>
+<div class="p17"><span class="s15">FS_FILE_USERABORT  </span>Copying was aborted by the user (through ProgressProc)</div>
+<div class="p17"><span class="s15">FS_FILE_NOTSUPPORTED  </span>The operation is not supported (e.g. resume)</div>
+<div class="p17"><span class="s15">FS_FILE_EXISTSRESUMEALLOWED  </span>not used here</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important notes:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Total Commander usually calls this function twice:</div>
+<div class="p14"><span class="s11">-  </span>once with OverWrite==false. If the remote file exists, return FS_FILE_EXISTS. If it doesn't exist, try to copy the file, and return an appropriate error code.</div>
+<div class="p14"><span class="s11">-  </span>a second time with OverWrite==true, if the user chose to overwrite the file.</div>
+<div class="p2">While copying the file, but at least at the beginning and the end, call ProgressProc to show the copy progress and allow the user to abort the operation.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

@@ -1,0 +1,48 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentGetSupportedFieldFlags</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentGetSupportedFieldFlags</B></div>
+<div class="p2">FsContentGetSupportedFieldFlags is called to get various information about a plugin variable. It's first called with FieldIndex=-1 to find out whether the plugin supports any special flags at all, and then for each field separately.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsContentGetSupportedFieldFlags(int FieldIndex);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p9"><span class="s2">FieldIndex  </span>The index of the field for which the sort order should be returned.</div>
+<div class="p9"><span class="s3">  </span>-1: Return a combination (or) of all supported flags, e.g. contflags_edit | contflags_substmask</div>
+<div class="p9"><span class="s3">  </span>&gt;=0: Return the field-specific flags</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">The function needs to return a combination of the following flags:</div>
+<div class="p8">&nbsp;</div>
+<div class="p11"><span class="s5">contflags_edit  </span>The plugin allows to edit (modify) this field via Files - Change attributes. This should only be returned for fields where it makes sense, e.g. a file date.</div>
+<div class="p9">&nbsp;</div>
+<div class="p2">Only ONE of the following flags: (See description and example under "Note").</div>
+<div class="p12"><span class="s6">contflags_substsize  </span>use the file size</div>
+<div class="p12"><span class="s6">contflags_substdatetime  </span>use the file date+time (ft_datetime)</div>
+<div class="p12"><span class="s6">contflags_substdate  </span>use the file date (fd_date)</div>
+<div class="p12"><span class="s6">contflags_substtime  </span>use the file time (fd_time)</div>
+<div class="p12"><span class="s6">contflags_substattributes  </span>use the file attributes (numeric)</div>
+<div class="p12"><span class="s6">contflags_substattributestr  </span>use the file attribute string in form -a--</div>
+<div class="p11"><span class="s7">contflags_substmask  </span>A combination of all above substituion flags. Should be returned for index -1 if the content plugin contains ANY of the substituted fields.</div>
+<div class="p5">&nbsp;</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>Note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Returning one of the&nbsp; contflags_subst* flags instructs Total Commander to replace (substitute) the returned variable by the indicated default internal value if this field is displayed outside of the context of the plugin. It may also be used to determine default sort orders.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

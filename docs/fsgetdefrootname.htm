@@ -1,0 +1,37 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsGetDefRootName</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsGetDefRootName</B></div>
+<div class="p2">FsGetDefRootName is called only when the plugin is installed. It asks the plugin for the default root name which should appear in the Network Neighborhood. This root name is NOT part of the path passed to the plugin when Totalcmd accesses the plugin file system! The root will always be "\", and all subpaths will be built from the directory names returned by the plugin.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Example:</B> The root name may be "Linux file system" for a plugin which accesses Linux drives. If this function isn't implemented, Totalcmd will suggest the name of the DLL (without extension .DLL) as the plugin root. This function is called directly after loading the plugin (when the user installs it), FsInit() is NOT called when installing the plugin.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">void __stdcall FsGetDefRootName(char* DefRootName, int maxlen);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p9"><span class="s2">DefRootName  </span>Pointer to a buffer (allocated by the calling program) which can receive the root name.</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">maxlen  </span>Maximum number of characters (including the final 0) which fit in the buffer.</div>
+<div class="p2">&nbsp;</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">None.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>See also:</B> <A HREF="fsfindfirst.htm">FsFindFirst</A>, <A HREF="fsfindnext.htm">FsFindNext</A><span class="s14">
+</span>
+</div>
+</BODY></HTML>

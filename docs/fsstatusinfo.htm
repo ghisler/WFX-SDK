@@ -1,0 +1,62 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsStatusInfo</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsStatusInfo</B></div>
+<div class="p2">FsStatusInfo is called just as an information to the plugin that a certain operation starts or ends. It can be used to allocate/free buffers, and/or to flush data from a cache. There is no need to implement this function if the plugin doesn't require it.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">void __stdcall FsStatusInfo(char* RemoteDir,int InfoStartEnd,int InfoOperation);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p19"><span class="s16">RemoteDir  </span>This is the current source directory when the operation starts. May be used to find out which part of the file system is affected.</div>
+<div class="p9">&nbsp;</div>
+<div class="p19"><span class="s16">InfoStartEnd  </span>Information whether the operation starts or ends. Possible values:</div>
+<div class="p20"><span class="s19">FS_STATUS_START  </span>Operation starts (allocate buffers if needed)</div>
+<div class="p20"><span class="s19">FS_STATUS_END  </span>Operation has ended (free buffers, flush cache etc)</div>
+<div class="p9">&nbsp;</div>
+<div class="p19"><span class="s16">InfoOperation  </span>Information of which operaration starts/ends. Possible values:</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_LIST  </span>Retrieve a directory listing</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_GET_SINGLE  </span>Get a single file from the plugin file system</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_GET_MULTI  </span>Get multiple files, may include subdirs</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_PUT_SINGLE  </span>Put a single file to the plugin file system</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_PUT_MULTI  </span>Put multiple files, may include subdirs</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_RENMOV_SINGLE  </span>Rename/Move/Remote copy a single file</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_RENMOV_MULTI  </span>RenMov multiple files, may include subdirs</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_DELETE  </span>Delete multiple files, may include subdirs</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_ATTRIB  </span>Change attributes/times, may include subdirs</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_MKDIR  </span>Create a single directory</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_EXEC  </span>Start a single remote item, or a command line</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_CALCSIZE  </span>Calculating size of subdir (user pressed SPACE)</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_SEARCH  </span>Searching for file names only (using FsFindFirst/Next/Close)</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_SEARCH_TEXT  </span>Searching for file contents (using also FsGetFile() calls)</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_SYNC_SEARCH  </span>Synchronize dirs searches subdirs for info</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_SYNC_GET  </span>Synchronize: Downloading files from plugin</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_SYNC_PUT  </span>Synchronize: Uploading files to plugin</div>
+<div class="p21"><span class="s20">FS_STATUS_OP_SYNC_DELETE  </span>Synchronize: Deleting files from plugin</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Please note that future versions of the framework may send additional values!</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">This function doesn't return a value.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">This function has been added for the convenience of plugin writers. All calls to plugin functions will be enclosed in a pair of FsStatusInfo() calls: At the start, <B>FsStatusInfo(...,FS_STATUS_START,...)</B> and when the operation is done <B>FsStatusInfo(...,FS_STATUS_END,...)</B>. Multiple plugin calls can be between these two calls. For example, a download may contain multiple calls to <A HREF="fsgetfile.htm">FsGetFile</A>(), and <A HREF="fsfindfirst.htm">FsFindFirst</A>(), <A HREF="fsfindnext.htm">FsFindNext</A>(), <A HREF="fsfindclose.htm">FsFindClose</A>() (for copying subdirs).</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Please also note that this function is only called for file operations. It isn't called for any of the FsContent* functions to get file details, and also not for the following functions: <A HREF="fssetdefaultparams.htm">FsSetDefaultParams</A>, <A HREF="fsgetlocalname.htm">FsGetLocalName</A>, <A HREF="fsgetpreviewbitmap.htm">FsGetPreviewBitmap</A>, <A HREF="fsextractcustomicon.htm">FsExtractCustomIcon</A>, <A HREF="fsdisconnect.htm">FsDisconnect</A>.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

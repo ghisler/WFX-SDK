@@ -1,0 +1,40 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsExecuteFile</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsExecuteFile</B></div>
+<div class="p2">FsExecuteFile is called to execute a file on the plugin's file system, or show its property sheet. It is also called to show a plugin configuration dialog when the user right clicks on the plugin root and chooses 'properties'. The plugin is then called with RemoteName="\" and Verb="properties" (requires TC&gt;=5.51).</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsExecuteFile(HWND MainWin,char* RemoteName,char* Verb);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">MainWin  </span>Parent window which can be used for showing a property sheet.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">RemoteName  </span>Name of the file to be executed, with full path.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">Verb  </span>This can be either "open", "properties", "chmod" or "quote" (case-insensitive).</div>
+<div class="p9"><span class="s3">  </span><B>open:</B> This is called when the user presses ENTER on a file. There are three ways to handle it:</div>
+<div class="p9"><span class="s3">  </span>a) For internal commands like "Add new connection", execute it in the plugin and return FS_EXEC_OK or FS_EXEC_ERROR</div>
+<div class="p9"><span class="s3">  </span>b) Let Total Commander download the file and execute it locally: return FS_EXEC_YOURSELF</div>
+<div class="p9"><span class="s3">  </span>c) If the file is a (symbolic) link, set <I>RemoteName</I> to the location to which the link points (including the full plugin path), and return FS_EXEC_SYMLINK. Total Commander will then switch to that directory. You can also switch to a directory on the local harddisk! To do this, return a path starting either with a drive letter, or an UNC location (\\server\share). The maximum allowed length of such a path is MAX_PATH-1 = 259 characters!</div>
+<div class="p9"><span class="s3">  </span><B>properties:</B> Show a property sheet for the file (optional). Currently not handled by internal Totalcmd functions if FS_EXEC_YOURSELF is returned, so the plugin needs to do it internally.</div>
+<div class="p9"><span class="s3">  </span><B>chmod xxx:</B> The xxx stands for the new Unix mode (attributes) to be applied to the file <I>RemoteName</I>. This verb is only used when returning Unix attributes through <A HREF="fsfindfirst.htm">FsFindFirst</A>/<A HREF="fsfindnext.htm">FsFindNext</A></div>
+<div class="p9"><span class="s3">  </span><B>quote commandline:</B> Execute the command line entered by the user in the directory <I>RemoteName .</I> This is called when the user enters a command in Totalcmd's command line, and presses ENTER. This is optional, and allows to send plugin-specific commands. It's up to the plugin writer what to support here. If the user entered e.g. a cd directory command, you can return the new path in RemoteName (max 259 characters), and give FS_EXEC_SYMLINK as return value. Return FS_EXEC_OK to cause a refresh (re-read) of the active panel.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">Return FS_EXEC_YOURSELF if Total Commander should download the file and execute it locally, FS_EXEC_OK if the command was executed successfully in the plugin (or if the command isn't applicable and no further action is needed), FS_EXEC_ERROR if execution failed, or FS_EXEC_SYMLINK if this was a (symbolic) link or .lnk file pointing to a different directory.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

@@ -1,0 +1,56 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsPutFile</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsPutFile</B></div>
+<div class="p2">FsPutFile is called to transfer a file from the normal file system (drive letters or UNC) to the plugin's file system.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsPutFile(char* LocalName,char* RemoteName,int CopyFlags);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">LocalName  </span>Local file name with full path, either with a drive letter or UNC path (\\Server\Share\filename). This file needs to be uploaded to the plugin's file system.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">RemoteName  </span>Name of the remote file, with full path. The name always starts with a backslash, then the names returned by FsFindFirst/FsFindNext separated by backslashes. The plugin may change the NAME/EXTENSION of the file (e.g. when file conversion is done), but not the path!</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">CopyFlags  </span>Can be a combination of the FS_COPYFLAGS_xxx flags</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_OVERWRITE: If set, overwrite any existing file without asking. If not set, simply fail copying.</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_RESUME: Resume an aborted or failed transfer.</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_MOVE: The plugin needs to delete the local file after uploading</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_EXISTS_SAMECASE: A hint from the calling program: The remote file exists and has the same case (upper/lowercase) as the local file.</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_EXISTS_DIFFERENTCASE: A hint from the calling program: The remote file exists and has different case (upper/lowercase) than the local file.</div>
+<div class="p9"><span class="s3">  </span><I>See below for important notes!</I></div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">Return one of the following values:</div>
+<div class="p17"><span class="s15">FS_FILE_OK  </span>The file was copied OK</div>
+<div class="p17"><span class="s15">FS_FILE_EXISTS  </span>The remote file already exists, and resume isn't supported</div>
+<div class="p17"><span class="s15">FS_FILE_NOTFOUND  </span>The local file couldn't be found or opened.</div>
+<div class="p17"><span class="s15">FS_FILE_READERROR  </span>There was an error reading from the local file</div>
+<div class="p17"><span class="s15">FS_FILE_WRITEERROR  </span>There was an error writing to the remote file, e.g. disk full</div>
+<div class="p17"><span class="s15">FS_FILE_USERABORT  </span>Copying was aborted by the user (through ProgressProc)</div>
+<div class="p17"><span class="s15">FS_FILE_NOTSUPPORTED  </span>The operation is not supported (e.g. resume)</div>
+<div class="p17"><span class="s15">FS_FILE_EXISTSRESUMEALLOWED  </span>The remote file already exists, and resume is supported</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important notes</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Total Commander usually calls this function twice, with the following parameters in CopyFlags:</div>
+<div class="p14"><span class="s11">-  </span>once with neither FS_COPYFLAGS_RESUME nor FS_COPYFLAGS_OVERWRITE set. If the remote file exists and resume is supported, return FS_FILE_EXISTSRESUMEALLOWED. If resume isn't allowed, return FS_FILE_EXISTS</div>
+<div class="p14"><span class="s11">-  </span>a second time with FS_COPYFLAGS_RESUME or FS_COPYFLAGS_OVERWRITE, depending on the user's choice. The resume option is only offered to the user if FS_FILE_EXISTSRESUMEALLOWED was returned by the first call.</div>
+<div class="p14"><span class="s11">-  </span>The flags FS_COPYFLAGS_EXISTS_SAMECASE or FS_COPYFLAGS_EXISTS_DIFFERENTCASE are added to CopyFlags when the remote file exists and needs to be overwritten. This is a hint to the plugin to allow optimizations: Depending on the plugin type, it may be very slow to check the server for every single file when uploading.</div>
+<div class="p14"><span class="s11">-  </span>If the flag FS_COPYFLAGS_MOVE is set, the plugin needs to delete the local file after a successful upload.</div>
+<div class="p2">While copying the file, but at least at the beginning and the end, call ProgressProc to show the copy progress and allow the user to abort the operation.</div>
+<div class="p9">
+</div>
+</BODY></HTML>

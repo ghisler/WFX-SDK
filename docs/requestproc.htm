@@ -1,0 +1,55 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>RequestProc</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>RequestProc</B></div>
+<div class="p2">RequestProc is a callback function, which the plugin can call to request input from the user. When using one of the standard parameters, the request will be in the selected language. The address of this callback function is received through the <A HREF="fsinit.htm">FsInit</A>() function when the plugin is loaded.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">BOOL __stdcall RequestProc(int PluginNr, int RequestType, char* CustomTitle, char* CustomText, char* ReturnedText, int maxlen);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">PluginNr  </span>Here the plugin needs to pass the plugin number received through the <A HREF="fsinit.htm">FsInit</A>() function.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">RequestType  </span>Can be one of the RT_XXX flags:</div>
+<div class="p9"><span class="s3">RT_Other  </span>The requested string is none of the default types</div>
+<div class="p9"><span class="s3">RT_UserName  </span>Ask for the user name, e.g. for a connection</div>
+<div class="p9"><span class="s3">RT_Password  </span>Ask for a password, e.g. for a connection (shows ***)</div>
+<div class="p9"><span class="s3">RT_Account  </span>Ask for an account (needed for some FTP servers)</div>
+<div class="p9"><span class="s3">RT_UserNameFirewall  </span>User name for a firewall</div>
+<div class="p9"><span class="s3">RT_PasswordFirewall  </span>Password for a firewall</div>
+<div class="p9"><span class="s3">RT_TargetDir  </span>Asks for a local directory (with browse button)</div>
+<div class="p9"><span class="s3">RT_URL  </span>Asks for an URL</div>
+<div class="p9"><span class="s3">RT_MsgOK  </span>Shows MessageBox with OK button</div>
+<div class="p9"><span class="s3">RT_MsgYesNo  </span>Shows MessageBox with Yes/No buttons</div>
+<div class="p9"><span class="s3">RT_MsgOKCancel  </span>Shows MessageBox with OK/Cancel buttons</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">CustomTitle  </span>Custom title for the dialog box. If NULL or empty, it will be "Total Commander"</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">CustomText  </span>Override the text defined with RequestType. Set this to NULL or an empty string to use the default text. The default text will be translated to the language set in the calling program.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ReturnedText  </span>This string contains the default text presented to the user, and will receive the (modified) text which the user enters. set ReturnedText[0]=0 to have no default text.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">maxlen  </span>Maximum length allowed for ReturnedText. The pointer ReturnedText must point to a buffer which can hold at least maxlen characters.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Returns TRUE if the user clicked OK or Yes, FALSE otherwise.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Leave CustomText empty if you want to use the (translated) default strings!</div>
+<div class="p2">
+</div>
+</BODY></HTML>

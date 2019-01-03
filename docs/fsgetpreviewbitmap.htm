@@ -1,0 +1,113 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsGetPreviewBitmap</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsGetPreviewBitmap</B></div>
+<div class="p2">FsGetPreviewBitmap is called when a file/directory is displayed in thumbnail view. It can be used to return a custom bitmap for that file/directory. This function is new in version 1.4. It requires Total Commander &gt;=7.0, but is ignored by older versions.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsGetPreviewBitmap(char* RemoteName, int width, int height, HBITMAP* ReturnedBitmap);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">RemoteName  </span>This is the full path to the file or directory whose bitmap is to be retrieved. When extracting a bitmap, you can return a bitmap name here - this ensures that the icon is only cached once in the calling program. The returned bitmap name must not be longer than MAX_PATH characters (including terminating 0!). The bitmap handle must still be returned in ReturnedBitmap!</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">width, height  </span>The maximum dimensions of the preview bitmap. If your image is smaller, or has a different side ratio, then you need to return an image which is smaller than these dimensions! See notes below!</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ReturnedBitmap  </span>Here you need to return the bitmap handle.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">The function has to return one of the following values:</div>
+<div class="p16"><span class="s13">FS_BITMAP_NONE  </span>There is no preview bitmap.</div>
+<div class="p16"><span class="s13">FS_BITMAP_EXTRACTED  </span>The image was extracted and is returned in ReturnedBitmap</div>
+<div class="p16"><span class="s13">FS_BITMAP_EXTRACT_YOURSELF  </span>Tells the caller to extract the image by itself. The full local path to the file needs to be returned in RemoteName. The returned bitmap name must not be longer than MAX_PATH.</div>
+<div class="p16">FS_BITMAP_EXTRACT_YOURSELF_ANDDELETE</div>
+<div class="p16"><span class="s13">  </span>Tells the caller to extract the image by itself, and then delete the temporary image file. The full local path to the temporary image file needs to be returned in RemoteName. The returned bitmap name must not be longer than MAX_PATH. In this case, the plugin downloads the file to TEMP and then asks TC to extract the image.</div>
+<div class="p18">&nbsp;</div>
+<div class="p16"><span class="s13">FS_BITMAP_CACHE  </span>This value must be ADDED to one of the above values if the caller should cache the image. Do NOT add this image if you will cache the image yourself!</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important notes:</B></div>
+<div class="p2">1. This function is only called in Total Commander 7.0 and later. The reported plugin version will be &gt;= 1.4.</div>
+<div class="p2">2. The bitmap handle goes into possession of Total Commander, which will delete it after using it. The plugin must not delete the bitmap handle!</div>
+<div class="p2">3.&nbsp;</div>
+<div class="p2">4. Make sure you scale your image correctly to the desired maximum width+height! Do not fill the rest of the bitmap - instead, create a bitmap which is SMALLER than requested! This way, Total Commander can center your image and fill the rest with the default background color.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">The following sample code will stretch a bitmap with dimensions bigwidth*bigheight down to max. width*height keeping the correct aspect ratio (proportions):</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">int __stdcall FsGetPreviewBitmap(char* RemoteName,int width,int height, HBITMAP* ReturnedBitmap)</div>
+<div class="p2">{</div>
+<div class="p2">&nbsp;&nbsp; int w,h,bigx,bigy;</div>
+<div class="p2">&nbsp;&nbsp; int stretchx,stretchy;</div>
+<div class="p2">&nbsp;&nbsp; OSVERSIONINFO vx;</div>
+<div class="p2">&nbsp;&nbsp; BOOL is_nt;</div>
+<div class="p2">&nbsp;&nbsp; BITMAP bmpobj;</div>
+<div class="p2">&nbsp;&nbsp; HBITMAP bmp_image,bmp_thumbnail,oldbmp_image,oldbmp_thumbnail;</div>
+<div class="p2">&nbsp;&nbsp; HDC maindc,dc_thumbnail,dc_image;</div>
+<div class="p2">&nbsp;&nbsp; POINT pt;</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">&nbsp;&nbsp; // check for operating system: Windows 9x does NOT support the HALFTONE stretchblt mode!</div>
+<div class="p2">&nbsp;&nbsp; vx.dwOSVersionInfoSize=sizeof(vx);</div>
+<div class="p2">&nbsp;&nbsp; GetVersionEx(&amp;vx);</div>
+<div class="p2">&nbsp;&nbsp; is_nt=vx.dwPlatformId==VER_PLATFORM_WIN32_NT;</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">&nbsp;&nbsp; // here you load your image</div>
+<div class="p2">&nbsp;&nbsp; bmp_image=SomeHowLoadImageFromFile(RemoteName);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">&nbsp;&nbsp; if (bmp_image &amp;&amp; GetObject(bmp_image,sizeof(bmpobj),&amp;bmpobj)) {</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bigx=bmpobj.bmWidth;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bigy=bmpobj.bmHeight;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // do we need to stretch?</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ((bigx&gt;=width || bigy&gt;=height) &amp;&amp; (bigx&gt;0 &amp;&amp; bigy&gt;0)) {</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stretchy=MulDiv(width,bigy,bigx);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (stretchy&lt;=height) {</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; w=width;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h=stretchy;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (h&lt;1) h=1;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stretchx=MulDiv(height,bigx,bigy);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; w=stretchx;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (w&lt;1) w=1;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h=height;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; maindc=GetDC(GetDesktopWindow());</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dc_thumbnail=CreateCompatibleDC(maindc);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dc_image=CreateCompatibleDC(maindc);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bmp_thumbnail=CreateCompatibleBitmap(maindc,w,h);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ReleaseDC(GetDesktopWindow(),maindc);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; oldbmp_image=(HBITMAP)SelectObject(dc_image,bmp_image);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; oldbmp_thumbnail=(HBITMAP)SelectObject(dc_thumbnail,bmp_thumbnail);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(is_nt) {</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetStretchBltMode(dc_thumbnail,HALFTONE);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetBrushOrgEx(dc_thumbnail,0,0,&amp;pt);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetStretchBltMode(dc_thumbnail,COLORONCOLOR);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StretchBlt(dc_thumbnail,0,0,w,h,dc_image,0,0,bigx,bigy,SRCCOPY);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SelectObject(dc_image,oldbmp_image);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SelectObject(dc_thumbnail,oldbmp_thumbnail);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DeleteDC(dc_image);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DeleteDC(dc_thumbnail);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DeleteObject(bmp_image);</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *ReturnedBitmap=bmp_thumbnail;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return FS_BITMAP_EXTRACTED | FS_BITMAP_CACHE;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *ReturnedBitmap=bmp_image;</div>
+<div class="p2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return FS_BITMAP_EXTRACTED | FS_BITMAP_CACHE;</div>
+<div class="p2">&nbsp;&nbsp; }</div>
+<div class="p2">&nbsp;&nbsp; return FS_BITMAP_NONE;</div>
+<div class="p2">}</div>
+<div class="p2">
+</div>
+</BODY></HTML>

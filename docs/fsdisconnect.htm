@@ -1,0 +1,38 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsDisconnect</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsDisconnect</B></div>
+<div class="p2">FsDisconnect is called when the user presses the Disconnect button in the FTP connections toolbar. This toolbar is only shown if MSGTYPE_CONNECT is passed to LogProc().</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">BOOL __stdcall FsDisconnect(char* DisconnectRoot);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">DisconnectRoot  </span>This is the root dir which was passed to LogProc when connecting. It allows the plugin to have serveral open connections to different file systems (e.g. ftp servers). Should be either \ (for a single possible connection) or \Servername (e.g. when having multiple open connections).</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Return TRUE if the connection was closed (or never open), FALSE if it couldn't be closed.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">To get calls to this function, the plugin MUST call LogProc with the parameter MSGTYPE_CONNECT. The parameter LogString MUST start with "CONNECT", followed by one whitespace and the root of the file system which has been connected. This file system root will be passed to FsDisconnect when the user presses the Disconnect button, so the plugin knows which connection to close.</div>
+<div class="p2">Do NOT call LogProc with MSGTYPE_CONNECT if your plugin does not require connect/disconnect!</div>
+<div class="p2"><B>Examples:</B></div>
+<div class="p14"><span class="s11">-  </span>FTP requires connect/disconnect. Connect can be done automatically when the user enters a subdir, disconnect when the user clicks the Disconnect button.</div>
+<div class="p14"><span class="s11">-  </span>Access to local file systems (e.g. Linux EXT2) does not require connect/disconnect, so don't call LogProc with the parameter MSGTYPE_CONNECT.
+
+</div>
+</BODY></HTML>

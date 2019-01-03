@@ -1,0 +1,57 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsGetFile</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsGetFile</B></div>
+<div class="p2">FsGetFile is called to transfer a file from the plugin's file system to the normal file system (drive letters or UNC).</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsGetFile(char* RemoteName, char* LocalName, int CopyFlags, RemoteInfoStruct* ri);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">RemoteName  </span>Name of the file to be retrieved, with full path. The name always starts with a backslash, then the names returned by FsFindFirst/FsFindNext separated by backslashes.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">LocalName  </span>Local file name with full path, either with a drive letter or UNC path (\\Server\Share\filename). The plugin may change the NAME/EXTENSION of the file (e.g. when file conversion is done), but not the path!</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">CopyFlags  </span>Can be a combination of the following three flags:</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_OVERWRITE: If set, overwrite any existing file without asking. If not set, simply fail copying.</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_RESUME: Resume an aborted or failed transfer.</div>
+<div class="p9"><span class="s3">  </span>FS_COPYFLAGS_MOVE: The plugin needs to delete the remote file after uploading</div>
+<div class="p9"><span class="s3">  </span>See below for important notes!</div>
+<div class="p9"><span class="s3"> &nbsp;</span></div>
+<div class="p9"><span class="s2">ri  </span>This parameter contains information about the remote file which was previously retrieved via FsFindFirst/FsFindNext: The size, date/time, and attributes of the remote file. May be useful to copy the attributes with the file, and for displaying a progress dialog.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">Return one of the following values:</div>
+<div class="p17"><span class="s15">FS_FILE_OK  </span>The file was copied OK</div>
+<div class="p17"><span class="s15">FS_FILE_EXISTS  </span>The local file already exists, and resume isn't supported</div>
+<div class="p17"><span class="s15">FS_FILE_NOTFOUND  </span>The remote file couldn't be found or opened.</div>
+<div class="p17"><span class="s15">FS_FILE_READERROR  </span>There was an error reading from the remote file</div>
+<div class="p17"><span class="s15">FS_FILE_WRITEERROR  </span>There was an error writing to the local file, e.g. disk full</div>
+<div class="p17"><span class="s15">FS_FILE_USERABORT  </span>Copying was aborted by the user (through ProgressProc)</div>
+<div class="p17"><span class="s15">FS_FILE_NOTSUPPORTED  </span>The operation is not supported (e.g. resume)</div>
+<div class="p17"><span class="s15">FS_FILE_EXISTSRESUMEALLOWED  </span>The local file already exists, and resume is supported</div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><B>Important notes</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p9">Total Commander usually calls this function twice:</div>
+<div class="p14"><span class="s11">-  </span>once with CopyFlags==0 or CopyFlags==FS_COPYFLAGS_MOVE. If the local file exists and resume is supported, return FS_FILE_EXISTSRESUMEALLOWED. If resume isn't allowed, return FS_FILE_EXISTS</div>
+<div class="p14"><span class="s11">-  </span>a second time with FS_COPYFLAGS_RESUME or FS_COPYFLAGS_OVERWRITE, depending on the user's choice. The resume option is only offered to the user if FS_FILE_EXISTSRESUMEALLOWED was returned by the first call.</div>
+<div class="p14"><span class="s11">-  </span>FS_COPYFLAGS_EXISTS_SAMECASE and FS_COPYFLAGS_EXISTS_DIFFERENTCASE are NEVER passed to this function, because the plugin can easily determine whether a local file exists or not.</div>
+<div class="p14"><span class="s11">-  </span>FS_COPYFLAGS_MOVE is set, the plugin needs to delete the remote file after a successful download.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">While copying the file, but at least at the beginning and the end, call ProgressProc to show the copy progress and allow the user to abort the operation.</div>
+<div class="p9">
+</div>
+</BODY></HTML>

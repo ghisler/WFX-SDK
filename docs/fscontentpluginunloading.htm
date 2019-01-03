@@ -1,0 +1,34 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentPluginUnloading</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentPluginUnloading</B></div>
+<div class="p2">FsContentPluginUnloading is called just before the plugin is unloaded, e.g. to close buffers, abort operations etc.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">void __stdcall FsContentPluginUnloading(void);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><B>T</B>here are no parameters.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">There is no return value.</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>Note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">This function was added by request from a user who needs to unload GDI+. It seems that GDI+ has a bug which makes it crash when unloading it in the DLL unload function, therefore a separate unload function is needed. The function is only called if the content plugin part of the file system plugin is used!</div>
+<div class="p2">
+</div>
+</BODY></HTML>

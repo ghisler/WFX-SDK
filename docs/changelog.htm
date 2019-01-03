@@ -1,0 +1,60 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>Changelog</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>Changelog</B></div>
+<div class="p2">This list shows recent changes to the plugin interface:</div>
+<div class="p2">&nbsp;</div>
+<div class="p4"><span class="s1">2019.01.03  </span>Converted to CHM help file</div>
+<div class="p4"><span class="s1">2011.09.07  </span>Release specifications version 2.1 second edition (TC 8.0) - no version number change since the functions are the same</div>
+<div class="p4"><span class="s1">2011.08.23  </span>Added Information about porting to 64-bit (no modifications to plugin interface)</div>
+<div class="p4"><span class="s1">2010.07.24  </span>Release specifications version 2.1 final (TC 7.55)</div>
+<div class="p4"><span class="s1">2010.01.20  </span>Release specifications version 2.1 beta</div>
+<div class="p4"><span class="s1">2010.01.20  </span>Added Information about background uploads and downloads</div>
+<div class="p4"><span class="s1">2009.03.29  </span>Release specifications version 2.0 (final)</div>
+<div class="p4"><span class="s1">2009.03.29  </span>Added: Information about long file names up to 1023 characters</div>
+<div class="p4"><span class="s1">2009.01.28  </span>Release specifications version 2.0 (pre2)</div>
+<div class="p4"><span class="s1">2009.01.28  </span>Added: <A HREF="fssetcryptcallback.htm">FsSetCryptCallback</A> and <A HREF="cryptproc.htm">CryptProc</A> for secure password storage</div>
+<div class="p4"><span class="s1">2008.09.21  </span>Release specifications version 2.0 (pre1)</div>
+<div class="p4"><span class="s1">2007.10.19  </span>Added: <A HREF="unicode_support.htm">Unicode</A> support</div>
+<div class="p4"><span class="s1">2005.11.21  </span>Release specifications version 1.5</div>
+<div class="p4"><span class="s1">2005.11.15  </span>Added: New functions FsContent* to create custom columns in file system plugins</div>
+<div class="p4"><span class="s1">2005.11.15  </span>Added: New functions <A HREF="fslinkstolocalfiles.htm">FsLinksToLocalFiles</A> and <A HREF="fsgetlocalname.htm">FsGetLocalName</A> to extract image for thumbnail view</div>
+<div class="p4"><span class="s1">2005.09.27  </span>Added: New function <A HREF="fsgetpreviewbitmap.htm">FsGetPreviewBitmap</A> to extract image for thumbnail view</div>
+<div class="p4"><span class="s1">2002.12.11  </span>Release specifications version 1.3</div>
+<div class="p4"><span class="s1">2002.12.10  </span>Added: FsSetDefaultParams function to inform the plugin about the plugin version number and suggested ini location.</div>
+<div class="p4"><span class="s1">2002.12.10  </span>Added: During the FsFindFirst/FsFindNext/FsFindClose loop, the plugin may now call the ProgressProc to make a progess dialog appear. This is useful for very slow connections. Don't call ProgressProc for fast connections! The progress dialog will only be shown for normal dir changes, not for compound operations like get/put. The calls to ProgressProc will also be ignored during the first 5 seconds, so the user isn't bothered with a progress dialog on every dir change.</div>
+<div class="p4"><span class="s1">2002.12.10  </span>Added: FS_STATUS_OP_SYNC_??? sent through <A HREF="fsstatusinfo.htm">FsStatusInfo</A> during the function "Synchronize dirs". For the compare step, FS_STATUS_OP_SYNC_SEARCH is sent once at the beginning and end of the whole compare operation. When the user clicks on "Synchronize", There are 3 possible operations: Get, Put and Delete. The correspoding messages FS_STATUS_OP_SYNC_GET, FS_STATUS_OP_SYNC_PUT and FS_STATUS_OP_SYNC_DELETE are sent to tell the plugin which step comes next.</div>
+<div class="p4"><span class="s1">2002.12.03  </span>Changed: In <A HREF="fsrenmovfile.htm">FsRenMovFile</A>, the fields in the <A HREF="remoteinfostruct.htm">RemoteInfoStruct</A> structure are set as follows for directories: SizeLow=0, SizeHigh=0xFFFFFFFF. This can be used to distinguish between files and directories when renaming with Shift+F6.</div>
+<div class="p4"><span class="s1">2002.12.02  </span>Changed: <A HREF="fsextractcustomicon.htm">FsExtractCustomIcon</A> appends backslash to name if it is a directory. This can be used to distinguish between files and directories, e.g. for returning special standard icons for directories.</div>
+<div class="p4">&nbsp;</div>
+<div class="p4"><span class="s1">2002.11.27  </span>Release specifications version 1.2</div>
+<div class="p4"><span class="s1">2002.11.27  </span>Added: Right clicking on plugin root and choosing 'Properties' will now call <A HREF="fsexecutefile.htm">FsExecuteFile</A> with RemoteName="\" and Verb="properties".</div>
+<div class="p4"><span class="s1">2002.11.26  </span>Added: FS_STATUS_OP_SEARCH and FS_STATUS_OP_SEARCH_TEXT sent through <A HREF="fsstatusinfo.htm">FsStatusInfo</A> when searching the plugin. FS_STATUS_OP_SEARCH is sent when searching for file names only. FS_STATUS_OP_SEARCH_TEXT is sent when searching for file contents. FsStatusInfo receives the base directory of the search, but all subdirs will be searched too.</div>
+<div class="p4"><span class="s1">2002.11.19  </span>Names passed to the calling app via ProgressProc will now be shown in the progress dialog!</div>
+<div class="p4"><span class="s1">2002.11.19  </span>Changes to <A HREF="fsgetfile.htm">FsGetFile</A>/<A HREF="fsputfile.htm">FsPutFile</A>: The plugin may change the name/extension of the target file, e.g. when a conversion is needed. The Windows CE plugin uses this, e.g. to convert from .DOC to .PWD (Pocket Word).</div>
+<div class="p4">&nbsp;</div>
+<div class="p4"><span class="s1">2002.11.13  </span>Release specifications version 1.11</div>
+<div class="p4"><span class="s1">2002.11.13  </span>Added: <A HREF="fsextractcustomicon.htm">FsExtractCustomIcon</A> may return icon name in RemoteName to improve caching strategy of the calling app. The icon handle must still be returned in TheIcon!</div>
+<div class="p4">&nbsp;</div>
+<div class="p4"><span class="s1">2002.11.12  </span>Release specifications version 1.1</div>
+<div class="p4"><span class="s1">2002.11.12  </span>Added: <A HREF="fsextractcustomicon.htm">FsExtractCustomIcon</A> function to return custom icons to the calling program (e.g. for drive buttons etc). If this function isn't implemented, standard icons will be shown.</div>
+<div class="p2">&nbsp;</div>
+<div class="p4"><span class="s1">2002.10.30  </span>Release specifications version 1.0</div>
+<div class="p4"><span class="s1">2002.10.01&nbsp;  </span>Added: <A HREF="fsexecutefile.htm">FsExecuteFile</A> alled with the quote command may now return FS_EXEC_SYMLINK and the new path in <I>RemoteName</I>. Totalcmd will then switch to this new directory.</div>
+<div class="p4"><span class="s1">2002.09.03  </span>Added: Show custom icons for file system plugins (just use first icon found inside the plugin)</div>
+<div class="p4"><span class="s1">2002.08.31  </span>Fixed: Make links work with file system plugins via FS_EXEC_SYMLINK in <A HREF="fsexecutefile.htm">FsExecuteFile</A> with 'open' verb.</div>
+<div class="p4"><span class="s1">2002.07.14  </span>New copy flags: FS_COPYFLAGS_MOVE in <A HREF="fsgetfile.htm">FsGetFile</A> and <A HREF="fsputfile.htm">FsPutFile</A>, and FS_COPYFLAGS_EXISTS_SAMECASE and FS_COPYFLAGS_EXISTS_DIFFERENTCASE in <A HREF="fsputfile.htm">FsPutFile</A>.</div>
+<div class="p4"><span class="s1">2002.07.14  </span>New root handling by function <A HREF="fsgetdefrootname.htm">FsGetDefRootName</A></div>
+<div class="p2">
+</div>
+</BODY></HTML>

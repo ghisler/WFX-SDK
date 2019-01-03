@@ -1,0 +1,45 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsExtractCustomIcon</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsExtractCustomIcon</B></div>
+<div class="p2">FsExtractCustomIcon is called when a file/directory is displayed in the file list. It can be used to specify a custom icon for that file/directory. This function is new in version 1.1. It requires Total Commander &gt;=5.51, but is ignored by older versions.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsExtractCustomIcon(char* RemoteName, int ExtractFlags, HICON* TheIcon);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">RemoteName  </span>This is the full path to the file or directory whose icon is to be retrieved. When extracting an icon, you can return an icon name here - this ensures that the icon is only cached once in the calling program. The returned icon name must not be longer than MAX_PATH characters (including terminating 0!). The icon handle must still be returned in TheIcon!</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ExtractFlags  </span>Flags for the extract operation. A combination of the following:</div>
+<div class="p15"><span class="s12">FS_ICONFLAG_SMALL  </span>Requests the small 16x16 icon</div>
+<div class="p15"><span class="s12">FS_ICONFLAG_BACKGROUND  </span>The function is called from the background thread (see note below)</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">TheIcon  </span>Here you need to return the icon handle.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">The function has to return one of the following values:</div>
+<div class="p16"><span class="s13">FS_ICON_USEDEFAULT  </span>No icon is returned. The calling app should show the default icon for this file type.</div>
+<div class="p16"><span class="s13">FS_ICON_EXTRACTED  </span>An icon was returned in TheIcon. The icon must NOT be freed by the calling app, e.g. because it was loaded with LoadIcon, or the DLL handles destruction of the icon.</div>
+<div class="p16"><span class="s13">FS_ICON_EXTRACTED_DESTROY  </span>An icon was returned in TheIcon. The icon MUST be destroyed by the calling app, e.g. because it was created with CreateIcon(), or extracted with ExtractIconEx().</div>
+<div class="p16"><span class="s13">FS_ICON_DELAYED  </span>This return value is only valid if FS_ICONFLAG_BACKGROUND was NOT set. It tells the calling app to show a default icon, and request the true icon in a background thread. See note below.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">If you return FS_ICON_DELAYED, FsExtractCustomIcon() will be called again from a background thread at a later time. A critical section is used by the calling app to ensure that FsExtractCustomIcon() is never entered twice at the same time. This return value should be used for icons which take a while to extract, e.g. EXE icons. In the fsplugin sample plugin, the drive icons are returned immediately (because they are stored in the plugin itself), but the EXE icons are loaded with a delay. If the user turns off background loading of icons, the function will be called in the foreground with the FS_ICONFLAG_BACKGROUND flag.</div>
+<div class="p16">
+</div>
+</BODY></HTML>

@@ -1,0 +1,34 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentGetDefaultSortOrder</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentGetDefaultSortOrder</B></div>
+<div class="p2">FsContentGetDefaultSortOrder is called when the user clicks on the sorting header above the columns.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsContentGetDefaultSortOrder(int FieldIndex);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p9"><span class="s2">FieldIndex  </span>The index of the field for which the sort order should be returned.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Return 1 for ascending (a..z, 1..9), or -1 for descending (z..a, 9..0).</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>Note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">You may implement this function if there are fields which are usually sorted in descending order, like the size field (largest file first) or the date/time fields (newest first). If the function isn't implemented, ascending will be the default.
+
+</div>
+</BODY></HTML>

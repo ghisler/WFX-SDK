@@ -1,0 +1,38 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentStopGetValue</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentStopGetValue</B></div>
+<div class="p2">FsContentStopGetValue is called to tell a plugin that a directory change has occurred, and the plugin should stop loading a value.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">void __stdcall FsContentStopGetValue(char* FileName);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p9"><span class="s2">FileName  </span>The name of the file for which FsContentGetValue is currently being called.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">The function has no return value.</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>Note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">This function only needs to be implemented when handling very slow fields, e.g. the calculation of the total size of all files in a directory. It will be called only while a call to FsContentGetValue is active in a background thread.</div>
+<div class="p2">A plugin could handle this mechanism like this:</div>
+<div class="p2">1. When FsContentGetValue is called, set a variable GetAborted to false</div>
+<div class="p2">2. When FsContentStopGetValue is called, set GetAborted to true</div>
+<div class="p2">3. Check GetAborted during the lengthy operation, and if it becomes true, return ft_fieldempty
+
+</div>
+</BODY></HTML>

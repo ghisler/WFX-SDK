@@ -1,0 +1,38 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>RemoteInfoStruct</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>RemoteInfoStruct</B></div>
+<div class="p2">RemoteInfoStruct is passed to <A HREF="fsgetfile.htm">FsGetFile</A> and <A HREF="fsrenmovfile.htm">FsRenMovFile</A>. It contains details about the remote file being copied.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">typedef struct {</div>
+<div class="p8">&nbsp;&nbsp;&nbsp; DWORD SizeLow,SizeHigh;</div>
+<div class="p8">&nbsp;&nbsp;&nbsp; FILETIME LastWriteTime;</div>
+<div class="p8">&nbsp;&nbsp;&nbsp; int Attr;</div>
+<div class="p8">} RemoteInfoStruct;</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of struct members:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">SizeLow,SizeHigh  </span>Low and high DWORD (32 bit each) of the remote file size. Useful for a progress indicator.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">LastWriteTime  </span>Time stamp of the remote file - should be copied with the file.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">Attr  </span>Attributes of the remote file - should be copied with the file.</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">This struct is passed to FsGetFile and FsRenMovFile to make it easier for the plugin to copy the file. You can of course also ignore this parameter.
+
+</div>
+</BODY></HTML>

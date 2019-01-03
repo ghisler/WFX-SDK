@@ -1,0 +1,56 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>CryptProc</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>CryptProc</B></div>
+<div class="p2">CryptProc is a callback function, which the plugin can call to store passwords in the secure password store, read them back, or copy them to a new connection.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall CryptProc(int PluginNr, int CryptoNumber, int mode, char* ConnectionName, char* Password, int maxlen);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p9"><span class="s2">PluginNr  </span>Here the plugin needs to pass the plugin number received through the <A HREF="fsinit.htm">FsInit</A>() function.</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">CryptoNumber  </span>Here the plugin needs to pass the crypto number received through the <A HREF="fssetcryptcallback.htm">FsSetCryptCallback</A>() function.</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">mode  </span>The mode of operation:</div>
+<div class="p9"><span class="s3">  </span>FS_CRYPT_SAVE_PASSWORD: Save password to password store</div>
+<div class="p9"><span class="s3">  </span>FS_CRYPT_LOAD_PASSWORD: Load password from password store</div>
+<div class="p9"><span class="s3">  </span>FS_CRYPT_LOAD_PASSWORD_NO_UI: Load password only if master password has already been entered</div>
+<div class="p9"><span class="s3">  </span>FS_CRYPT_COPY_PASSWORD: Copy password to new connection. Here the second string parameter "Password" is not a password, but the name of the target connection</div>
+<div class="p9"><span class="s3">  </span>FS_CRYPT_MOVE_PASSWORD: As above, but delete the source password</div>
+<div class="p9"><span class="s3">  </span>FS_CRYPT_DELETE_PASSWORD: Delete the password of the given connection</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">ConnectionName  </span>Name of the connection for this operation</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">Password  </span>Operation-specific, usually the password to be stored/retrieved, or the target connection when copying/moving a connection</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">maxlen  </span>Maximum length, in characters, the password buffer can store when calling one of the load functions</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Total Commander returns one of these values:</div>
+<div class="p2"><span class="s4">FS_FILE_OK  </span>Success</div>
+<div class="p2"><span class="s4">FS_FILE_NOTSUPPORTED  </span>Encrypt/Decrypt failed</div>
+<div class="p2"><span class="s4">FS_FILE_WRITEERROR  </span>Could not write password to password store</div>
+<div class="p2"><span class="s4">FS_FILE_READERROR  </span>Password not found in password store</div>
+<div class="p2"><span class="s4">FS_FILE_NOTFOUND  </span>No master password entered yet</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">See the WebDAV plugin sources for an example on how to use these functions. When showing the details of an existing connection, you should call FS_CRYPT_LOAD_PASSWORD_NO_UI first. In case of error FS_FILE_NOTFOUND, show a button "Edit password". Only call FS_CRYPT_LOAD_PASSWORD when the user clicks that button, or tries to connect. This way the user doesn't have to enter the master password if he just wanted to make some other changes to the connection settings.</div>
+<div class="p5">&nbsp;</div>
+<div class="p2">
+</div>
+</BODY></HTML>

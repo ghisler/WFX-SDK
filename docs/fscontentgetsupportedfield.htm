@@ -1,0 +1,56 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentGetSupportedField</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentGetSupportedField</B></div>
+<div class="p2">FsContentGetSupportedField is called to enumerate all supported fields. FieldIndex is increased by 1 starting from 0 until the plugin returns ft_nomorefields.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">This function is identical to the function ContentGetSupportedField in Content plugins, except that ft_fulltext isn't currently supported.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsContentGetSupportedField(int FieldIndex,char* FieldName,</div>
+<div class="p8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char* Units,int maxlen);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">FieldIndex  </span>The index of the field for which TC requests information. Starting with 0, the FieldIndex is increased until the plugin returns an error.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FieldName  </span>Here the plugin has to return the name of the field with index FieldIndex. The field may not contain the following chars: . (dot) | (vertical line) : (colon). You may return a maximum of maxlen characters, including the trailing 0.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">Units  </span>When a field supports several units like bytes, kbytes, Mbytes etc, they need to be specified here in the following form: bytes|kbytes|Mbytes . The separator is the vertical dash (Alt+0124). As field names, unit names may not contain a vertical dash, a dot, or a colon. You may return a maximum of maxlen characters, including the trailing 0.</div>
+<div class="p9"><span class="s3">  </span>If the field type is <B>ft_multiplechoice</B>, the plugin needs to return all possible values here. <B>Example:</B> The field "File Type" of the built-in content plugin can have the values "File", "Folder" and "Reparse point". The available choices need to be returned in the following form: File|Folder|Reparse point . The same separator is used as for Units. You may return a maximum of maxlen characters, including the trailing 0. The field type ft_multiplechoice does NOT support any units.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">maxlen  </span>The maximum number of characters, including the trailing 0, which may be returned in each of the fields.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p9">The function needs to return one of the following values:</div>
+<div class="p9"><span class="s3">ft_nomorefields  </span>The FieldIndex is beyond the last available field.</div>
+<div class="p9"><span class="s3">ft_numeric_32  </span>A 32-bit signed number</div>
+<div class="p9"><span class="s3">ft_numeric_64  </span>A 64-bit signed number, e.g. for file sizes</div>
+<div class="p9"><span class="s3">ft_numeric_floating  </span>A double precision floating point number</div>
+<div class="p9"><span class="s3">ft_date  </span>A date value (year, month, day)</div>
+<div class="p9"><span class="s3">ft_time  </span>A time value (hour, minute, second). Date and time are in local time.</div>
+<div class="p9"><span class="s3">ft_boolean  </span>A true/false value</div>
+<div class="p9"><span class="s3">ft_multiplechoice  </span>A value allowing a limited number of choices. Use the Units field to return all possible values.</div>
+<div class="p9"><span class="s3">ft_string  </span>A text string</div>
+<div class="p9"><span class="s3">ft_fulltext  </span>This field is currently not supported in file system plugins.</div>
+<div class="p9"><span class="s3">ft_datetime  </span>A timestamp of type FILETIME, as returned e.g. by FindFirstFile(). It is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601. The time MUST be relative to universal time (Greenwich mean time) as returned by the file system, not local time!</div>
+<div class="p2">&nbsp;</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Remarks:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">Please note that fields of type ft_fulltext only show up in the search function, not in the multi-rename tool or the file lists. All fields of this type MUST be placed at the END of the field list, otherwise you will get errors in Total Commander! This is necessary because these fields will be removed from field lists e.g. in the "configure custom column view" dialog. You should use the ft_string type for shorter one line texts suitable for displaying in file lists and for renaming.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

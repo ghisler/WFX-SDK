@@ -1,0 +1,38 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsSetCryptCallback</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsSetCryptCallback</B></div>
+<div class="p2">FsSetCryptCallback is called when loading the plugin. The passed values should be stored in the plugin for later use. This function is only needed if you want to use the secure password store in Total Commander.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">void __stdcall FsSetCryptCallback(tCryptProc pCryptProc,int CryptoNr,int Flags);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p9"><span class="s2">pCryptProc  </span>Pointer to the crypto callback function. See <A HREF="cryptproc.htm">CryptProc</A> for a description of this function</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">CryptoNr  </span>A parameter which needs to be passed to the callback function</div>
+<div class="p10">&nbsp;</div>
+<div class="p9"><span class="s2">Flags  </span>Flags regarding the crypto connection. Currently only FS_CRYPTOPT_MASTERPASS_SET is defined. It is set when the user has defined a master password.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p9">This function does not return any value.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Remarks:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">You can use this callback function to store passwords in Total Commander's secure password store. The user will be asked for the master password automatically.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

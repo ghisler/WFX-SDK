@@ -1,0 +1,54 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>LogProc</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>LogProc</B></div>
+<div class="p2">LogProc is a callback function, which the plugin can call to show the FTP connections toolbar, and to pass log messages to it. Totalcmd can show these messages in the log window (ftp toolbar) and write them to a log file. The address of this callback function is received through the <A HREF="fsinit.htm">FsInit</A>() function when the plugin is loaded.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">void __stdcall LogProc(int PluginNr,int MsgType,char* LogString);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p19"><span class="s16">PluginNr  </span>Here the plugin needs to pass the plugin number received through the <A HREF="fsinit.htm">FsInit</A>() function.</div>
+<div class="p19">&nbsp;</div>
+<div class="p19"><span class="s16">MsgType  </span>Can be one of the MSGTYPE_XXX flags:</div>
+<div class="p21"><span class="s20">MSGTYPE_CONNECT  </span>Connect to a file system requiring disconnect</div>
+<div class="p21"><span class="s20">MSGTYPE_DISCONNECT  </span>Disconnected successfully</div>
+<div class="p21"><span class="s20">MSGTYPE_DETAILS  </span>Not so important messages like directory changing</div>
+<div class="p21"><span class="s20">MSGTYPE_TRANSFERCOMPLETE  </span>A file transfer was completed successfully</div>
+<div class="p21"><span class="s20">MSGTYPE_CONNECTCOMPLETE  </span>unused</div>
+<div class="p21"><span class="s20">MSGTYPE_IMPORTANTERROR  </span>An important error has occured</div>
+<div class="p21"><span class="s20">MSGTYPE_OPERATIONCOMPLETE  </span>An operation other than a file transfer has completed</div>
+<div class="p22">Total Commander supports logging to files. While one log file will store all messages, the other will only store important errors, connects, disconnects and complete operations/transfers, but not messages of type MSGTYPE_DETAILS.</div>
+<div class="p9">&nbsp;</div>
+<div class="p19"><span class="s16">LogString  </span>String which should be logged.</div>
+<div class="p19"><span class="s16">  </span>When MsgType==MSGTYPE_CONNECT, the string MUST have a specific format:</div>
+<div class="p19"><span class="s16">  </span>"CONNECT" followed by a single whitespace, then the root of the file system which was connected, without trailing backslash. Example: CONNECT \Filesystem</div>
+<div class="p19"><span class="s16">  </span>When MsgType==MSGTYPE_TRANSFERCOMPLETE, this parameter should contain both the source and target names, separated by an arrow " -&gt; ", e.g.</div>
+<div class="p19"><span class="s16">  </span>Download complete: \Filesystem\dir1\file1.txt -&gt; c:\localdir\file1.txt</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">There is no return value.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Do NOT call LogProc with MSGTYPE_CONNECT if your plugin does not require connect/disconnect! If you call it with MsgType==MSGTYPE_CONNECT, the function FsDisconnect will be called (if defined) when the user presses the Disconnect button.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Examples:</B></div>
+<div class="p2">- FTP requires connect/disconnect, so call LogProc with MSGTYPE_CONNECT when a connection is established.</div>
+<div class="p2">- Access to local file systems (e.g. Linux EXT2) does not require connect/disconnect</div>
+<div class="p2">
+</div>
+</BODY></HTML>

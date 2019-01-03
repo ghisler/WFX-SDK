@@ -1,0 +1,73 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentSetValue</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentSetValue</B></div>
+<div class="p2">FsContentSetValue is called to set the value of a specific field for a given file, e.g. to change the date field of a file.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsContentSetValue(char* FileName,int FieldIndex,int UnitIndex,int FieldType,</div>
+<div class="p8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void* FieldValue,int flags);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">FileName  </span>The name of the file (in plugin namespace) for which the plugin needs to change the field data.</div>
+<div class="p9"><span class="s3">  </span>This is set to <B>NULL</B> to indicate the end of change attributes (see remarks below).</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FieldIndex  </span>The index of the field for which the content has to be returned. This is the same index as the FieldIndex value in FsContentGetSupportedField. This is set to -1 to signal the end of change attributes (see remarks below).</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">UnitIndex  </span>The index of the unit used. <B>Example:</B></div>
+<div class="p9"><span class="s3">  </span>If the plugin returned the following unit string in FsContentGetSupportedField:</div>
+<div class="p9"><span class="s3">  </span>bytes|kbytes|Mbytes</div>
+<div class="p9"><span class="s3">  </span>Then a UnitIndex of 0 would mean bytes, 1 means kbytes and 2 means MBytes</div>
+<div class="p9"><span class="s3">  </span>If no unit string was returned, UnitIndex is 0.</div>
+<div class="p9"><span class="s3">  </span>ft_fulltext is currently unsupported.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FieldType  </span>The type of data passed to the plugin in FieldValue. This is the same type as returned by the plugin via FsContentGetSupportedField. If the plugin returned a different type via FsContentGetValue, the the FieldType _may_ be of that type too.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FieldValue  </span>Here the plugin receives the data to be changed. The data format depends on the field type:</div>
+<div class="p9"><span class="s3">  </span>ft_numeric_32: FieldValue points to a 32-bit signed integer variable.</div>
+<div class="p9"><span class="s3">  </span>ft_numeric_64: FieldValue points to a 64-bit signed integer variable.</div>
+<div class="p9"><span class="s3">  </span>ft_numeric_floating: FieldValue points to a 64-bit floating point variable (ISO standard double precision)</div>
+<div class="p9"><span class="s3">  </span>ft_date: FieldValue points to a structure containing year,month,day as 2 byte values.</div>
+<div class="p9"><span class="s3">  </span>ft_time: FieldValue points to a structure containing hour,minute,second as 2 byte values.</div>
+<div class="p9"><span class="s3">  </span>ft_boolean: FieldValue points to a 32-bit number. 0 neans false, anything else means true.</div>
+<div class="p9"><span class="s3">  </span>ft_string or ft_multiplechoice: FieldValue is a pointer to a 0-terminated string.</div>
+<div class="p9"><span class="s3">  </span>ft_fulltext: Currently unsupported.</div>
+<div class="p9"><span class="s3">  </span>ft_datetime: A timestamp of type FILETIME, as returned e.g. by FindFirstFile(). It is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601. The time MUST be relative to universal time (Greenwich mean time) as returned by the file system, not local time!</div>
+<div class="p9"><span class="s3">  </span>ft_delayed, ft_ondemand: You may return a zero-terminated string as in ft_string, which will be shown until the actual value has been extracted. Requires plugin version&gt;=1.4.</div>
+<div class="p4">&nbsp;</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">flags  </span>Currently the following flags are defined:</div>
+<div class="p9"><span class="s3">  </span>setflags_first_attribute: This is the first attribute to be set for this file via this plugin. May be used for optimization.</div>
+<div class="p9"><span class="s3">  </span>setflags_last_attribute: This is the last attribute to be set for this file via this plugin.</div>
+<div class="p9"><span class="s3">  </span>setflags_only_date: For field type ft_datetime only: User has only entered a date, don't change the time</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">ft_setsuccess  </span>Change was successful</div>
+<div class="p9"><span class="s3">ft_fileerror  </span>Error accessing the specified file FileName, or cannot set the given value</div>
+<div class="p9"><span class="s3">ft_nosuchfield  </span>The given field index was invalid</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Remarks:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>About caching the data:</B> Total Commander will not call a mix of FsContentSetValue for different files, it will only call it for the next file when the previous file can be closed. Therefore a single cache per running Total Commander should be sufficient.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>About the flags:</B> If the flags setflags_first_attribute and setflags_last_attribute are both set, then this is the only attribute of this plugin which is changed for this file.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B><A HREF="fssetattr.htm">FsSetAttr</B></A> needs to be implemented too, otherwise the change attributes dialog (which is also used to change custom plugin attributes) cannot be used for this function.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>FileName</B> is set to NULL and <B>FieldIndex</B> to -1 to signal to the plugin that the change attributes operation has ended. This can be used to flush unsaved data to disk, e.g. when setting comments for multiple files.</div>
+<div class="p2">
+</div>
+</BODY></HTML>

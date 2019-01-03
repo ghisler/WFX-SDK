@@ -1,0 +1,40 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsInit</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsInit</B></div>
+<div class="p2">FsInit is called when loading the plugin. The passed values should be stored in the plugin for later use.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsInit(int PluginNr, tProgressProc pProgressProc, tLogProc pLogProc, tRequestProc pRequestProc);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">PluginNr  </span>Internal number this plugin was given in Total Commander. Has to be passed as the first parameter in all callback functions so Totalcmd knows which plugin has sent the request.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">pProgressProc  </span>Pointer to the progress callback function.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">pLogProc  </span>Pointer to the logging function</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">pRequestProc  </span>Pointer to the request text proc</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">The return value is currently unused. You should return 0 when successful.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Remarks:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">FsInit is NOT called when the user initially installs the plugin. Only <A HREF="fsgetdefrootname.htm">FsGetDefRootName</A>.is called in this case, and then the plugin DLL is unloaded again. The plugin DLL is loaded when the user enters the plugin root in Network Neighborhood.
+
+</div>
+</BODY></HTML>

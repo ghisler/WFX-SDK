@@ -1,0 +1,40 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsGetBackgroundFlags</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsGetBackgroundFlags</B></div>
+<div class="p2">FsGetBackgroundFlags is called by Total Commander 7.51 or newer to determine whether the plugin supports background operations (uploads and downloads), and if yes, how they are supported.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsGetBackgroundFlags(void);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9">There are no parameters</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>A combination of the following flags:</B></div>
+<div class="p9"><span class="s3">BG_DOWNLOAD  </span>Download in background is supported</div>
+<div class="p9"><span class="s3">BG_UPLOAD  </span>Upload in background is supported</div>
+<div class="p9"><span class="s3">BG_ASK_USER  </span>If this flag is set, the user must be asked BEFORE the transfer starts whether the file should be sent/retrieved in background or foreground. This is necessary for plugins where a separate connection is needed for background transfers, e.g. the SFTP (secure ftp) plugin.</div>
+<div class="p9"><span class="s3">  </span>If the flag isn't set, there will be a "background" button in the actual progress window.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Remarks:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2">If the flag BG_ASK_USER is set and the user checks the option to transfer the file in background, Total Commander starts a background thread and calls FsStatusInfo with parameters FS_STATUS_START and FS_STATUS_OP_GET_MULTI_THREAD instead of FS_STATUS_OP_GET_MULTI for downloads, and FS_STATUS_OP_PUT_MULTI_THREAD instead of FS_STATUS_OP_PUT_MULTI for uploads. A corresponding FS_STATUS_END is sent when the transfer is done. These notifications can be used to build up the background connection and to close it when done. You need to use GetCurrentThreadID() to recognize a background operation. GetCurrentThreadID() will return the same value for the entire operation in FsStatusInfo, FsGetFile and FsPutFile.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">If the flag BG_ASK_USER is NOT set, all uploads and downloads with F5 or F6 will be started in a background thread. Initially the normal foreground transfer window will be shown, which will be changed to a background transfer window when the user clicks on "Background". For the plugin, the entire operation will take place in the same background thread, though. This method is recommended only for plugins where no extra connections are needed for multiple parallel transfers, or where the additional connections are built up very quickly. Example of a plugin using this method is the WinCE plugin for Windows Mobile devices.
+
+</div>
+</BODY></HTML>

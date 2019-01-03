@@ -1,0 +1,75 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>Overview</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>Overview</B></div>
+<div class="p2">This help file is about writing file system plugins for Total Commander. File system plugins will show up in Network Neighborhood, not in the new file system. It is recommended to use the source of an existing plugin as a starting point.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>The minimum functions needed for a read-only (browsing) plugin are:</B></div>
+<div class="p9"><span class="s3"><A HREF="fsinit.htm">FsInit</A>  </span>Initialize the plugin, and pass callback functions to it</div>
+<div class="p9"><span class="s3"><A HREF="fsfindfirst.htm">FsFindFirst</A>  </span>Retrieve the first file in a directory</div>
+<div class="p9"><span class="s3"><A HREF="fsfindnext.htm">FsFindNext</A>  </span>Get the next file in the directory</div>
+<div class="p9"><span class="s3"><A HREF="fsfindclose.htm">FsFindClose</A>  </span>Close the search handle</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>The following optional functions allow to manipulate individual files.</B> If you don't implement it, do NOT add it as an empty function! Total Commander will try to load these functions one by one, and only call those which you implement.</div>
+<div class="p9"><span class="s3"><A HREF="fsgetdefrootname.htm">FsGetDefRootName</A>  </span>Asks the plugin for the name of the root folder shown in Network Neighborhood. If not implemented, Totalcmd will use the name of the DLL (without the extension).</div>
+<div class="p9"><span class="s3"><A HREF="fsgetfile.htm">FsGetFile</A>  </span>Download a file from the plugin file system to a local disk</div>
+<div class="p9"><span class="s3"><A HREF="fsputfile.htm">FsPutFile</A>  </span>Upload a file from the local disk to the plugin file system</div>
+<div class="p9"><span class="s3"><A HREF="fsrenmovfile.htm">FsRenMovFile</A>  </span>Copy, rename or move a file within the plugin file system</div>
+<div class="p9"><span class="s3"><A HREF="fsdeletefile.htm">FsDeleteFile</A>  </span>Delete a file on the plugin file system</div>
+<div class="p9"><span class="s3"><A HREF="fsremovedir.htm">FsRemoveDir</A>  </span>Remove a directory on the plugin file system</div>
+<div class="p9"><span class="s3"><A HREF="fsmkdir.htm">FsMkDir</A>  </span>Create a new directory in the plugin file system</div>
+<div class="p9"><span class="s3"><A HREF="fsexecutefile.htm">FsExecuteFile</A>  </span>Execute a command or launch a file on the plugin file system, or show properties</div>
+<div class="p9"><span class="s3"><A HREF="fssetattr.htm">FsSetAttr</A>  </span>Set the file attributes of a file or directory</div>
+<div class="p9"><span class="s3"><A HREF="fssettime.htm">FsSetTime</A>  </span>Set the file times</div>
+<div class="p9"><span class="s3"><A HREF="fsdisconnect.htm">FsDisconnect</A>  </span>For file systems requiring a connection: User pressed disconnect button</div>
+<div class="p9"><span class="s3"><A HREF="fsextractcustomicon.htm">FsExtractCustomIcon</A>  </span>Extract icon for file list</div>
+<div class="p9"><span class="s3"><A HREF="fsstatusinfo.htm">FsStatusInfo</A>  </span>Informs the plugin that an operation is just going to start or end (purely informational)</div>
+<div class="p9"><span class="s3"><A HREF="fsgetpreviewbitmap.htm">FsGetPreviewBitmap</A>  </span>Return a bitmap for thumbnail view</div>
+<div class="p9"><span class="s3"><A HREF="fslinkstolocalfiles.htm">FsLinksToLocalFiles</A>  </span>This function is only needed when implementing a temp panel plugin</div>
+<div class="p9"><span class="s3"><A HREF="fsgetlocalname.htm">FsGetLocalName</A>  </span>See <A HREF="fslinkstolocalfiles.htm">FsLinksToLocalFiles</A></div>
+<div class="p9"><span class="s3">FsContent*  </span>These functions are almost identical to the Content* functions of the content plugin interface</div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3"><A HREF="fsgetbackgroundflags.htm">FsGetBackgroundFlags</A>  </span>Allows to support Uploads and Downloads in the background (separate thread)</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>There are also 3 callback functions which the plugin can call:</B></div>
+<div class="p9"><span class="s3"><A HREF="progressproc.htm">ProgressProc</A>  </span>Call this to indicate the progress in percent of a single copy operation</div>
+<div class="p9"><span class="s3"><A HREF="logproc.htm">LogProc</A>  </span>Call to add information to the log file, and to make the FTP toolbar appear</div>
+<div class="p9"><span class="s3"><A HREF="requestproc.htm">RequestProc</A>  </span>Request input from the user, e.g. a user name, password etc.</div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>How it works:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">When a user installs the plugin in Total Commander, the plugin is loaded and <A HREF="fsgetdefrootname.htm">FsGetDefRootName</A> is called without a previous call to FsInit. The name returned will be saved to wincmd.ini. Then the plugin will be unloaded. When the user enters Network Neighborhood, Totalcmd will enumerate all plugins listed in wincmd.ini without loading the plugins! A plugin will only be loaded when the user tries to enter the plugin root directory. It's also possible that a user jumps directly to a plugin subdirectory by using the 'directory hotlist' or 'directory history' functions in Totalcmd.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">When the plugin is loaded, Totalcmd tries to get the addresses for the above functions. If any of the minimum functions isn't implemented, loading of the plugin will fail. If any of the optional functions is missing, loading will succeed, but the functions (e.g. deletion) will not be available to the user. After retrieving the function addresses, Totalcmd will call <A HREF="fsinit.htm">FsInit</A> to let the plugin know its number and the callback function addresses.</div>
+<div class="p3">&nbsp;</div>
+<div class="p3">The framework (Total Commander) will refresh the file list whenever the user enters any directory in the plugin's file system. The same procedure will also be executed if the framework wants to work with subdirectories, e.g. while copying/moving/deleting files in a subdir selected by the user. This is done by recursively calling <A HREF="fsfindfirst.htm">FsFindFirst</A>()...<A HREF="fsfindnext.htm">FsFindNext</A>()...<A HREF="fsfindclose.htm">FsFindClose</A>() for every directory encountered in the tree. This system will be called FNC (findfirst-next-close) in this text.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">For the plugin root, Totalcmd calls <A HREF="fsfindfirst.htm">FsFindFirst</A>() with the parameter Path set to "\". The plugin should return all the items in the root, e.g. the drive letters of a remote machine, the available file systems etc. When the returned item has the directory flag set, Totalcmd will use the name to build a subdirectory path. Subdirectories are built by concatenating returned directory names separated by Backslashes, e.g. \drive1\c:\some\subdir</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">While downloading or remote-copying whole directory trees, the framework executes a complete FNC loop of a subdir and stores the files in an internal list. Then it checks the list for files and copies these files, and in a second loop it checks the list for directories, and if it encounters them, it recursively copies the subdirs. This allows to recursively copy a whole tree.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">For counting the files in subdirs and for deleting files, multiple open file handles are needed. You should therefore initialise a temporary structure whenever <A HREF="fsfindfirst.htm">FsFindFirst</A>() is called, return its handle (pointer) to the framework, and delete it in <A HREF="fsfindclose.htm">FsFindClose</A>(), using that same handle that is now returned to you. It's important to know that there may be multiple open find handles a the same time, although great care is taken to avoid this.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Some framework function may call other functions when the need arises - for instance, <A HREF="fsremovedir.htm">FsRemoveDir</A>() is called during moving of files in order to delete the directories that are no longer needed.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Here are some cases when you CAN'T rely on the FNC to get called (because it has already been called before):</div>
+<div class="p2">- when copying some files in the currently active directory, and there are no directories selected for copying</div>
+<div class="p2">- when viewing a file with F3</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">If <A HREF="fsstatusinfo.htm">FsStatusInfo</A> is implemented, the plugin will be informed every time an operation starts and ends. No plugin functions except for FsInit and FsDisconnect will be called without an enclosing pair of <A HREF="fsstatusinfo.htm">FsStatusInfo</A> calls.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">It is strongly recommended to start with an existing plugin source and modify it, e.g. with the very simple fsplugin sample source. Then first implement <A HREF="fsinit.htm">FsInit</A>, <A HREF="fsfindfirst.htm">FsFindFirst</A>, <A HREF="fsfindnext.htm">FsFindNext</A> and <A HREF="fsfindclose.htm">FsFindClose</A> to browse your file system. When this works, you can add the other functions to add functionality like uploading and downloading.</div>
+<div class="p5">&nbsp;</div>
+<div class="p2">
+</div>
+</BODY></HTML>

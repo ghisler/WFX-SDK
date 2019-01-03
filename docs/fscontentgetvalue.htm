@@ -1,0 +1,77 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsContentGetValue</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsContentGetValue</B></div>
+<div class="p2">FsContentGetValue is called to retrieve the value of a specific field for a given file, e.g. the date field of a file.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">int __stdcall FsContentGetValue(char* FileName,int FieldIndex,int UnitIndex,</div>
+<div class="p8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void* FieldValue,int maxlen,int flags);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9"><span class="s3">FileName  </span>The name of the file (in plugin namespace) for which the plugin needs to return the field data.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FieldIndex  </span>The index of the field for which the content has to be returned. This is the same index as the FieldIndex value in FsContentGetSupportedField.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">UnitIndex  </span>The index of the unit used. <B>Example:</B></div>
+<div class="p9">If the plugin returned the following unit string in FsContentGetSupportedField:</div>
+<div class="p9">bytes|kbytes|Mbytes</div>
+<div class="p9">Then a UnitIndex of 0 would mean bytes, 1 means kbytes and 2 means MBytes</div>
+<div class="p9">If no unit string was returned, UnitIndex is 0.</div>
+<div class="p9">For ft_fulltext, UnitIndex contains the offset of the data to be read.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">FieldValue  </span>Here the plugin needs to return the requested data. The data format depends on the field type:</div>
+<div class="p9"><span class="s3">  </span>ft_numeric_32: FieldValue points to a 32-bit signed integer variable.</div>
+<div class="p9"><span class="s3">  </span>ft_numeric_64: FieldValue points to a 64-bit signed integer variable.</div>
+<div class="p9"><span class="s3">  </span>ft_numeric_floating: FieldValue points to a 64-bit floating point variable (ISO standard double precision)</div>
+<div class="p9"><span class="s3">  </span>See remark below about additional string field!</div>
+<div class="p9"><span class="s3">  </span>ft_date: FieldValue points to a structure containing year,month,day as 2 byte values.</div>
+<div class="p9"><span class="s3">  </span>ft_time: FieldValue points to a structure containing hour,minute,second as 2 byte values.</div>
+<div class="p9"><span class="s3">  </span>ft_boolean: FieldValue points to a 32-bit number. 0 neans false, anything else means true.</div>
+<div class="p9"><span class="s3">  </span>ft_string or ft_multiplechoice: FieldValue is a pointer to a 0-terminated string.</div>
+<div class="p9"><span class="s3">  </span>ft_fulltext: Read maxlen bytes of interpreted data starting at offset UnitIndex. The data must be a 0 terminated string.</div>
+<div class="p9"><span class="s3">  </span>ft_datetime: A timestamp of type FILETIME, as returned e.g. by FindFirstFile(). It is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601. The time MUST be relative to universal time (Greenwich mean time) as returned by the file system, not local time!</div>
+<div class="p9"><span class="s3">  </span>ft_delayed, ft_ondemand: You may return a zero-terminated string as in ft_string, which will be shown until the actual value has been extracted. Requires plugin version&gt;=1.4.</div>
+<div class="p4">&nbsp;</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">maxlen  </span>The maximum number of bytes fitting into the FieldValue variable.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><span class="s3">flags  </span>Currently only one flag is defined:</div>
+<div class="p9"><span class="s3">  </span>CONTENT_DELAYIFSLOW: If this flag is set, the plugin should return ft_delayed for fields which take a long time to extract, like file version information. Total Commander will then call the function again in a background thread without the CONTENT_DELAYIFSLOW flag. This means that your plugin must be implemented thread-safe if you plan to return ft_delayed.</div>
+<div class="p9"><span class="s3">  </span>The plugin may also reutrn ft_ondemand if CONTENT_DELAYIFSLOW is set. In this case, the field will only be retrieved when the user presses &lt;SPACEBAR&gt;. This is only recommended for fields which take a VERY long time, e.g. directory content size. You should offer the same field twice in this case, once as delayed, and once as on demand. The field will be retrieved in the background thread also in this case.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p9">Return the field type in case of success, or one of the following error values otherwise:</div>
+<div class="p9"><span class="s3">ft_nosuchfield  </span>The given FieldIndex is invalid</div>
+<div class="p9"><span class="s3">ft_fileerror  </span>Error accessing the specified file FileName</div>
+<div class="p9"><span class="s3">ft_fieldempty  </span>The file does not contain the specified field</div>
+<div class="p9"><span class="s3">ft_delayed  </span>The extraction of the field would take a long time, so Total Commander should request it again in a background thread. This error may only be returned if the flag CONTENT_DELAYIFSLOW was set, and if the plugin is thread-safe.</div>
+<div class="p9"><span class="s3">ft_ondemand  </span>The extraction of the field would take a very long time, so it should only be retrieved when the user presses the space bar. This error may only be returned if the flag CONTENT_DELAYIFSLOW was set, and if the plugin is thread-safe.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Remarks:</B></div>
+<div class="p9">&nbsp;</div>
+<div class="p2"><B>ft_fulltext </B>handling is a bit special. It is only used for searching in interpreted file contents, e.g. for finding text in binary files. For example, the ID3 plugin uses ft_fulltext to allow the user to search for a string in ALL header fields.</div>
+<div class="p2">Calls work like this:</div>
+<div class="p2">First, FsContentGetValue is called with UnitIndex set to 0. The plugin then parses the file data, and (if necessary) keeps it in a cache. It writes the first block of <span class="s8">maxlen-1</span> bytes to <span class="s8">FieldValue</span> and returns ft_fulltext. The data written must be a 0-terminated string! Total Commander then searches in the block, and requests the next block with offset maxlen-1, etc. Once there is no more data, the plugin needs to retrun ft_fieldempty. If there is a match, TC signals the plugin that it can delete the cached data by calling FsContentGetValue with UnitIndex set to -1! The return value should be ft_fieldempty in this case. This call with UnitIndex=-1 does not happen when the plugin terminates the search with ft_fieldempty because it reached the end of the file.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2">Total Commander accepts that FsContentGetValue returns a different data type than FsContentGetSupportedField for the same field, e.g. a string "no value" instead of a numeric field.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>ft_numeric_floating</B>: You can now put a 0-terminated string immediately behind the 64bit floating point variable, which will then be shown instead in file lists. This is useful if the conversion precision used by TC isn't appropriate for your variables. The numeric variable will still be used for sorting and searching. If the string is empty, TC will ignore it (it is set to 0 before calling this function, so the function will remain backwards-compatible). Example: The numeric value is 0.000002. You can return this value as a 64-bit variable, and the string you find most appropriate, e.g. "2*10^-6" or "0.000002".</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>About caching the data:</B> Total Commander will not call a mix FsContentGetValue for different files, it will only call it for the next file when the previous file can be closed. Therefore a single cache per running Total Commander would be sufficient. However, there may be other calls to FsContentGetValue with requests to other fields in the background, e.g. for displaying result lists. There may also be multiple instances of Total Commander at the same time, so if you use a TEMP file for storing the cached data, make sure to give it a unique name (e.g. via GetTempFileName).</div>
+<div class="p2">
+</div>
+</BODY></HTML>

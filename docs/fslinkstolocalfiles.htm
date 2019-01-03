@@ -1,0 +1,42 @@
+<HTML><HEAD>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	
+	<TITLE>FsLinksToLocalFiles</TITLE>
+	
+	<META NAME="AUTHOR" CONTENT="Copyright ©2002-2019 Christian Ghisler">
+	<META NAME="GENERATOR" CONTENT="HelpScribble 7.8.0">
+<link href="ie.css" type="text/css" rel="stylesheet">
+<!--[if gte IE 5]>
+<style type="text/css">@import url(ie5+.css);</style>
+<![endif]-->
+</HEAD>
+<BODY>
+<div class="p1"><B>FsLinksToLocalFiles</B></div>
+<div class="p2">FsLinksToLocalFiles must not be implemented unless your plugin is a temporary file panel plugin! Temporary file panels just hold links to files on the local file system.</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Declaration:</B></div>
+<div class="p8">&nbsp;</div>
+<div class="p8">BOOL __stdcall FsLinksToLocalFiles(void);</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Description of parameters:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p9">There are no parameters.</div>
+<div class="p9">&nbsp;</div>
+<div class="p9"><B>Return value:</B></div>
+<div class="p2">&nbsp;</div>
+<div class="p2">The function has to return one of the following values:</div>
+<div class="p19"><span class="s16">true  </span>The plugin is a temporary panel-style plugin</div>
+<div class="p19"><span class="s16">false  </span>The plugin is a normal file system plugin</div>
+<div class="p2">&nbsp;</div>
+<div class="p2"><B>Important note:</B></div>
+<div class="p2">If your plugin is a temporary panel plugin, the following functions MUST be thread-safe (can be called from background transfer manager):</div>
+<div class="p2">- FsLinksToLocalFiles</div>
+<div class="p2">- FsFindFirst</div>
+<div class="p2">- FsFindNext</div>
+<div class="p2">- FsFindClose</div>
+<div class="p2">- FsGetLocalName</div>
+<div class="p2">This means that when uploading subdirectories from your plugin to FTP in the background, Total Commander will call these functions in a background thread. If the user continues to work in the foreground, calls to FsFindFirst and FsFindNext may be occuring at the same time! Therefore it's very important to use the search handle to keep temporary information about the search.</div>
+<div class="p2">FsStatusInfo will NOT be called from the background thread!</div>
+<div class="p2">
+</div>
+</BODY></HTML>
